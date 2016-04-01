@@ -11,6 +11,27 @@
 #' @param mod model out of {Gompertz, Richards, logistic, Weibull}, only used instead of bSDE
 #' @param modVar model for the variance structure
 #'
+#'
+#' @examples
+#' mod <- "Gompertz"
+#' bSDE <- getFun("SDE", mod)
+#' mu <- getPar("SDE", mod, "truePar")
+#' n <- 5
+#' parameters <- defaultPar(mu, n)
+#' y <- drawData("SDE", bSDE, parameters)
+#' t <- parameters$t
+#' 
+#' prior <- getPrior(mu, parameters$gamma2)
+#' start <- getStart(mu, n)
+#' chains <- estSDE(t, y, prior, cut = 50, ipred = 1, start, bSDE, len = 5000)
+#' ind <- seq(1001, 5000, by = 4)
+#' samples <- list(phi = sapply(1:length(mu), function(i) phi = phi_ij(chains$phi, 1, i))[ind, ], gamma2 = chains$gamma2[ind])
+#' prediction <- predSDE(t[50:101], samples, y[1,50], bSDE, cand = seq(-2, 2, length = 1000))
+#' plot(t[51:101], y[1,51:101], ylim = range(y[1,51:101]) + c(0, 1))
+#' lines(t[51:101], apply(prediction, 1, quantile, 0.025), col = 3)
+#' lines(t[51:101], apply(prediction, 1, quantile, 0.975), col = 3)
+#' lines(t[51:101], apply(prediction, 1, mean), col = 2)
+#' 
 #' @return matrix of predictions in t
 #' @export
 
